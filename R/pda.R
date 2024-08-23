@@ -835,6 +835,7 @@ pdaSync <- function(config){
         message('meta analysis (inverse variance weighted average) result:')
         #print(res)
         control$beta_init = bmeta
+	control$beta_init_var = vmeta
         if (control$model == "ODACATH"){
           control$bhat_eta = bhat_eta
         }
