@@ -280,7 +280,8 @@ ODAC.estimate <- function(ipdata,control,config) {
                fn = logL_tilde,
                # gr = logL_tilde_D1,
                hessian = TRUE,
-               control = list(maxit=control$optim_maxit))
+               method = "BFGS",
+	       control = list(maxit=control$optim_maxit))
   
   surr <- list(btilde = sol$par, Htilde = sol$hessian, site=config$site_id, site_size=nrow(ipdata))
   
