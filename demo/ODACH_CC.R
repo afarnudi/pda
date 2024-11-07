@@ -1,12 +1,14 @@
 require(survival)
 require(data.table)
+library(pda)
+
 # require(pda) 
 
 # rho = 0.2 
 # odach_cc$sampling_weight[synthetic_data$subcohort==1] = 1/rho  
   
-load('/Users/chongliangluo/Library/CloudStorage/Dropbox/PDA-git/pda/data/odach_cc.rda')
-setwd('/Users/chongliangluo/Library/CloudStorage/Dropbox/PDA_test/CL/')
+# load('/Users/chongliangluo/Library/CloudStorage/Dropbox/PDA-git/pda/data/odach_cc.rda')
+# setwd('/Users/chongliangluo/Library/CloudStorage/Dropbox/PDA_test/CL/')
 
 ## In the toy example below we aim to analyze the association of survival {time} with X1 and X2 using Cox reg with case-cohort design,
 ## data(odach_cc) simulated, subsampled case+cohort data, 3 sites: 'site1', 'site2', 'site3'
@@ -17,7 +19,11 @@ setwd('/Users/chongliangluo/Library/CloudStorage/Dropbox/PDA_test/CL/')
 ## will be assigned to the sites at the server https://pda.one.
 ## Each site can access via web browser to check the communication of the summary stats.
 
-data(odach_cc)
+# data(odach_cc)
+load("../data/odach_cc.rda")
+# print(odach_cc)
+# print(nrow(odach_cc))
+# stop()
 data_split <- split(odach_cc, odach_cc$site)
 
 # ## cch stratified by site...
@@ -39,10 +45,14 @@ fit.pool$var
     
 
 # cch each site
-cch(Surv(time, status) ~ X1 + X2, data = cbind(ID=1:nrow(data_split[[3]]), data_split[[3]]),
+cch(Surv(time, status) ~ X1 + X2, data = cbind(ID=1:nrow(data_split[[2]]), data_split[[2]]),
     subcoh = ~subcohort, id = ~ID, cohort.size = 400, method = 'Prentice')$coef
 # -0.6578062  0.6004303 
+cch(Surv(time, status) ~ X1 + X2, data = cbind(ID=1:nrow(data_split[[1]]), data_split[[1]]),
+    subcoh = ~subcohort, id = ~ID, cohort.size = 400, method = 'Prentice')$coef
 # -0.5175115  0.3163663 
+cch(Surv(time, status) ~ X1 + X2, data = cbind(ID=1:nrow(data_split[[3]]), data_split[[3]]),
+    subcoh = ~subcohort, id = ~ID, cohort.size = 400, method = 'Prentice')$coef
 # -0.5471417  0.4696186 
 
 sites = c('site1', 'site2', 'site3')
@@ -67,6 +77,7 @@ control <- list(project_name = 'ODACH case-cohort toy example',
 ## run the example in local directory:
 ## specify your working directory, default is the tempdir
 mydir <- getwd()   # tempdir()
+print(mydir)
 ## assume lead site1: enter "1" to allow transferring the control file
 pda(site_id = 'site1', control = control, dir = mydir)
 ## in actual collaboration, account/password for pda server will be assigned, thus:
@@ -79,6 +90,7 @@ S=readline(prompt="Type  <Return>   to continue : ")
 ## assume remote site3: enter "1" to allow tranferring your local estimate
 pda(site_id = 'site3', ipdata = data_split[[3]], dir=mydir)
 ODACH_CC.initialize(ipdata,control,config)
+# stop()
   
 S=readline(prompt="Type  <Return>   to continue : ")
 ## assume remote site2: enter "1" to allow tranferring your local estimate
