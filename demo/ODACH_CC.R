@@ -88,9 +88,7 @@ pda(site_id = 'site1', control = control, dir = mydir)
 
 S=readline(prompt="Type  <Return>   to continue : ")
 ## assume remote site3: enter "1" to allow tranferring your local estimate
-pda(site_id = 'site3', ipdata = data_split[[3]], dir=mydir)
-ODACH_CC.initialize(ipdata,control,config)
-# stop()
+pda(site_id = 'site3', ipdata = data_split[[3]], dir=mydir) 
   
 S=readline(prompt="Type  <Return>   to continue : ")
 ## assume remote site2: enter "1" to allow tranferring your local estimate
