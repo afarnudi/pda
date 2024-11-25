@@ -24,8 +24,17 @@ load("../data/odach_cc.rda")
 # print(odach_cc)
 # print(nrow(odach_cc))
 # stop()
+n_rows <- nrow(odach_cc)
+odach_cc$Group <- factor(rep(c("A", "B", "C"), length.out = n_rows))      # First new factor column
+odach_cc$Category <- factor(rep(c("X", "Y", "Z"), length.out = n_rows))
 data_split <- split(odach_cc, odach_cc$site)
-
+# print(nrow(data_split[[1]]))
+# print(nrow(data_split[[2]]))
+# print(nrow(data_split[[3]]))
+# print(colnames(data_split[[3]]))
+# print(unique(data_split[[3]]$subcohort))
+# print(data_split[[1]])
+# stop()
 # ## cch stratified by site...
 # fit.strat <- optim(par = initial_beta, fn = pool_fun, control = list(fnscale = -1), method = "BFGS",
 #                 covariate_list = pre_processing$covariate_list,
@@ -67,7 +76,7 @@ control <- list(project_name = 'ODACH case-cohort toy example',
                 full_cohort_size = c(site1=800,site2=600,site3=400),
                 method = 'Prentice',
                 outcome = "Surv(time, status)",
-                variables = c('X1', 'X2'),
+                variables = c('Group', 'Category'),
                 # xlev = list(sex=c('F', 'M')),  #levels of all categorical X's, with the first being the reference
                 optim_maxit = 100,
                 lead_site = 'site1',
@@ -131,3 +140,12 @@ pda(site_id = 'site1', ipdata = data_split[[1]], dir=mydir)
 ## the PDA ODACH_CC is now completed!
 ## All the sites can still run their own surrogate estimates and broadcast them.
  
+
+
+
+    ##' the PDA ODACH is now completed!
+    ##' All the sites can still run their own surrogate estimates and broadcast them.
+
+    ##' compare the surrogate estimate with the pooled estimate
+    config <- getCloudConfig(site_id = 'site1', dir = mydir)
+    pda::pdaSync(config)
