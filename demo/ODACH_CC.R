@@ -18,7 +18,7 @@ library(pda)
 ## Each site can access via web browser to check the communication of the summary stats.
 
 # data(odach_cc)
-load("../data/odach_cc.rda")
+load("data/odach_cc.rda")
 # print(odach_cc)
 # print(nrow(odach_cc))
 # stop()
