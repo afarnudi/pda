@@ -28,9 +28,9 @@ load("data/odach_cc.rda")
 # print(odach_cc)
 # print(nrow(odach_cc))
 # stop()
-n_rows <- nrow(odach_cc)
-odach_cc$Group <- factor(rep(c("A", "B", "C"), length.out = n_rows))      # First new factor column
-odach_cc$Category <- factor(rep(c("X", "Y", "Z"), length.out = n_rows))
+# n_rows <- nrow(odach_cc)
+# odach_cc$Group <- factor(rep(c("A", "B", "C"), length.out = n_rows))      # First new factor column
+# odach_cc$Category <- factor(rep(c("X", "Y", "Z"), length.out = n_rows))
 data_split <- split(odach_cc, odach_cc$site)
 
 ## cch stratified by site, using self-written cch_pooled()
