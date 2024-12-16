@@ -17,20 +17,27 @@ prepare_case_cohort <- function(ipdata, method, full_cohort_size) {
     risk_sets <- as.list(rep(NA, failure_num))
     risk_set_weights <- as.list(rep(NA, failure_num))
     for (j in 1:failure_num) {
-      my_risk_set1 <- which((ipdata$subcohort == 1) & (ipdata$texit >= failure_times[j]))
-      if (method == "Prentice") {
-        my_weight1 <- rep(1, length(my_risk_set1))
-      }
-      if (ipdata$subcohort[which(ipdata$texit == failure_times[j])] == 0) {
-        my_risk_set2 <- which(ipdata$texit == failure_times[j])
-        my_weight2 <- 1
-      } else {
-        my_risk_set2 <- c()
-        my_weight2 <- c()
-      }
+      # Prentice weight: Subjects in the risk set (R_j) inside subcohort get a weight of 1
+      # R_i = {j: Y_J >= Y_i > a_j};  Y_i = min(T_i, W_i); T_i: failure time; W_i: censoring time; a_i: subject enters the study
+      in_subcohort_and_failtime_after_event <- which((ipdata$subcohort == 1) & (ipdata$texit >= failure_times[j]))
+      in_subcohort_and_entry_before_event <- which((ipdata$subcohort == 1) & (ipdata$tenter < failure_times[j]))
+      my_risk_set1 <- intersect(in_subcohort_and_failtime_after_event, in_subcohort_and_entry_before_event)
+      my_weight1 <- rep(1, length(my_risk_set1))
+      
+      # Prentice weight: Subjects in the risk set (R_j) outside subcohort get a weight of 1 but only for subjects that fail at the time of event
+      # R_i = {j: Y_J >= Y_i > a_j};  Y_i = min(T_i, W_i); T_i: failure time; W_i: censoring time; a_i: subject enters the study
+      out_subcohort_and_failtime_at_event <- which((ipdata$subcohort == 0) & (ipdata$texit == failure_times[j]))
+      out_subcohort_and_entry_before_event <- which((ipdata$subcohort == 0) & (ipdata$tenter < failure_times[j]))
+      my_risk_set2 <- intersect(out_subcohort_and_failtime_at_event, out_subcohort_and_entry_before_event)
+      my_weight2 <- rep(1, length(my_risk_set2))
+    
       risk_sets[[j]] <- c(my_risk_set1, my_risk_set2)
       risk_set_weights[[j]] <- c(my_weight1, my_weight2)
+      # print(j)
+      # print(risk_sets[[j]])
+      # print(risk_set_weights[[j]])
     }
+    # stop()
   } else {
     covariate <- as.matrix(ipdata[, -c(1:3)])
     # find over which position lies the failure times
