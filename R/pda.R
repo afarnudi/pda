@@ -688,7 +688,7 @@ pda <- function(ipdata=NULL,site_id,control=NULL,dir=NULL,uri=NULL,secret=NULL,
                                         model.matrix(formula, mf)[,-1])
         ipdata$time_in <- 0
       }
-      if(control$method == "Prentice"){
+      if(isTRUE(control$method == "Prentice")){
         times <- sort(unique(c(ipdata$time_in, ipdata$time_out)))
         precision <- min(diff(times)) / 2
         ipdata[ipdata$subcohort == 0, "time_in"] <- ipdata[ipdata$subcohort == 0, "time_out"] - precision

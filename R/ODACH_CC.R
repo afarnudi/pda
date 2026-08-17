@@ -114,7 +114,7 @@ ODACH_CC.initialize <- function(ipdata,control,config){
 #'   get_logL_D1(fit)
 #' }
 get_logL_D1 <- function(coxph_fit){
-  grad <- colSums(stats::residuals(coxph_fit, type = "score"))
+  grad <- colSums(as.matrix(stats::residuals(coxph_fit, type = "score")))
   logL_D1 <- as.vector(grad)
   return(logL_D1)
 }
@@ -148,7 +148,12 @@ get_logL_D1 <- function(coxph_fit){
 #' }
 get_logL_D2 <- function(coxph_fit){
   det <- survival::coxph.detail(coxph_fit, riskmat = FALSE)
-  I_total <- apply(det$imat, c(1, 2), sum)
+  imat <- det$imat
+  if (is.null(dim(imat))) {
+    I_total <- matrix(sum(imat), 1, 1)   # p == 1: imat is a length-d vector
+  } else {
+    I_total <- apply(imat, c(1, 2), sum) # p >= 2
+  }
   logL_D2 <- -as.matrix(I_total)
   dimnames(logL_D2) <- NULL
   return(logL_D2)
@@ -202,7 +207,7 @@ ODACH_CC.derive <- function(ipdata,control,config){
     method = "breslow",
     control = survival::coxph.control(iter.max = 0)
     )
-  
+
   logL_D1 <- get_logL_D1(fit_i)
   logL_D2 <- get_logL_D2(fit_i)
   
