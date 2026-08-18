@@ -678,14 +678,14 @@ pda <- function(ipdata=NULL,site_id,control=NULL,dir=NULL,uri=NULL,secret=NULL,
                                         subcohort = ipdata$subcohort,
                                         strata_id = strata_id,
                                         # sampling_weight = ipdata$sampling_weight,
-                                        model.matrix(formula, mf)[,-1])
+                                        model.matrix(formula, mf)[,-1, drop = FALSE])
       }else{ 
         ipdata = data.table::data.table(time_out=as.numeric(model.response(mf))[1:n], 
                                         status=as.numeric(model.response(mf))[(n+1):(2*n)], 
                                         subcohort = ipdata$subcohort,
                                         strata_id = strata_id,
                                         # sampling_weight = ipdata$sampling_weight,
-                                        model.matrix(formula, mf)[,-1])
+                                        model.matrix(formula, mf)[,-1, drop = FALSE])
         ipdata$time_in <- 0
       }
       if(isTRUE(control$method == "Prentice")){
