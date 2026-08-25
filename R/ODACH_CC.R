@@ -33,6 +33,7 @@
 #'               medRxiv, 2021, https://doi.org/10.1101/2021.04.18.21255694
 #' @return  list(bhat_i = fit_i$coef, Vhat_i = summary(fit_i)$coef[,2]^2, site=control$mysite, site_size= nrow(ipdata))
 #' @keywords internal
+#' @export
 ODACH_CC.initialize <- function(ipdata,control,config){
   # coxph with case-cohort design
   # ipdata columns: time_in, time_out, status, subcohort, strata_id, and covariates
@@ -113,6 +114,7 @@ ODACH_CC.initialize <- function(ipdata,control,config){
 #'   fit <- coxph(Surv(time, status) ~ age + sex, data = lung)
 #'   get_logL_D1(fit)
 #' }
+#' @export
 get_logL_D1 <- function(coxph_fit){
   grad <- colSums(as.matrix(stats::residuals(coxph_fit, type = "score")))
   logL_D1 <- as.vector(grad)
@@ -146,6 +148,7 @@ get_logL_D1 <- function(coxph_fit){
 #'   fit <- coxph(Surv(time, status) ~ age + sex, data = lung)
 #'   get_logL_D2(fit)
 #' }
+#' @export
 get_logL_D2 <- function(coxph_fit){
   det <- survival::coxph.detail(coxph_fit, riskmat = FALSE)
   imat <- det$imat
@@ -172,6 +175,7 @@ get_logL_D2 <- function(coxph_fit){
 #' @import Rcpp  
 #' @return  list(bbar=bbar, site=control$mysite, site_size = nrow(ipdata), logL_D1=logL_D1, logL_D2=logL_D2)
 #' @keywords internal
+#' @export
 ODACH_CC.derive <- function(ipdata,control,config){
   px <- ncol(ipdata) - 5
   

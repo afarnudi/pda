@@ -14,7 +14,7 @@ ODAC.initialize(ipdata, control, config)
 \item{config}{local site configuration}
 }
 \value{
-list(T_i = T_i, bhat_i = fit_i$coef, Vhat_i = summary(fit_i)$coef[,2]^2, site=control$mysite, site_size= nrow(ipdata))
+list(bhat_i = fit_i$coef, Vhat_i = summary(fit_i)$coef[,"se(coef)"]^2, site=control$site_id, site_size= nrow(ipdata))
 }
 \description{
 ODAC initialize

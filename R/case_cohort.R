@@ -8,6 +8,7 @@
 # this is used in ODACH_CC.derive(), ipdata_i contains columns (built-in colnames): 
 # time_in, time_out, status, subcohort, strata_id, and covariates (no ID)
 #' @keywords internal
+#' @export
 prepare_case_cohort <- function(ipdata_i){
   # for each site, pre-calculate the failure time points, the risk sets, and the respective weights
   # also, remove those sites with zero events

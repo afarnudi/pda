@@ -49,6 +49,7 @@ rcpp_aggregate <- function(x, indices, simplify = TRUE, cumulative = FALSE, reve
     .Call('_pda_rcpp_aggregate', PACKAGE = 'pda', x, indices, simplify, cumulative, reversely)
 }
 
+#' @export
 rcpp_cc_log_plk <- function(beta, covariate, failure_position, failure_num, risk_sets) {
     .Call('_pda_rcpp_cc_log_plk', PACKAGE = 'pda', beta, covariate, failure_position, failure_num, risk_sets)
 }
